@@ -5,9 +5,10 @@
 // Object Definition.
 // Represent shape that can be drawn in CAD.
 class Shape {
-	constructor(id, type, vertices, rgbVal) {
+	constructor(id, type, vertices, rgbVal, shapeName) {
 		this.id = id;
 		this.type = type;
+		this.shapeName = shapeName;
 		this.vertices = vertices;
 		this.rgbVal = rgbVal;
 	}

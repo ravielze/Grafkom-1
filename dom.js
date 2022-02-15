@@ -21,6 +21,7 @@ let rgbVal = [0, 0, 0];
 const btnDrawLine = document.getElementById("draw-line");
 const btnDrawSquare = document.getElementById("draw-square");
 const btnDrawPolygon = document.getElementById("draw-polygon");
+const btnDrawRectangle = document.getElementById("draw-rectangle");
 
 // Change the drawn object based on button.
 btnDrawLine.addEventListener("click", () => {
@@ -31,6 +32,9 @@ btnDrawSquare.addEventListener("click", () => {
 });
 btnDrawPolygon.addEventListener("click", () => {
     drawObject = "polygon";
+});
+btnDrawRectangle.addEventListener("click", () => {
+    drawObject = "rectangle";
 });
 
 
@@ -49,12 +53,13 @@ const mouseDown = function(e){
         }
 
         // Finish drawing Square.
-        if (drawObject == "square" && vertices.length == 8) {
+        if ((drawObject == "rectangle" || drawObject == "square") && vertices.length == 8) {
             isDrawing = false;
         }
         
     }
 
+    // Refresh screen.
     renderAll();
     e.preventDefault();
 }
@@ -63,16 +68,23 @@ const mouseDown = function(e){
 const mouseUp = function(e) {
     // Already finish drawing object.
     if (drawObject != '' && !isDrawing){
+        // Determine draw object.
         if (drawObject == 'line') {
             // Create Line object and store it in array.
-            const Line = new Shape(idx, gl.LINES, vertices, rgbVal);
-            allShapes.push(Line);
+            const line = new Shape(idx, gl.LINES, vertices, rgbVal, 'line');
+            allShapes.push(line);
         }
-
+        
         if (drawObject == 'square') {
             // Create Square object and store it in array.
-            const Square = new Shape(idx, gl.TRIANGLE_FAN, vertices, rgbVal);
-            allShapes.push(Square);
+            const square = new Shape(idx, gl.TRIANGLE_STRIP, vertices, rgbVal, 'square');
+            allShapes.push(square);
+        }
+
+        if (drawObject == 'rectangle') {
+            // Create Square object and store it in array.
+            const rectangle = new Shape(idx, gl.TRIANGLE_FAN, vertices, rgbVal, 'rectangle');
+            allShapes.push(rectangle);
         }
 
         // Refresh drawing attribute.
@@ -81,6 +93,7 @@ const mouseUp = function(e) {
         drawObject = '';
     }
 
+    // Refresh screen.
     renderAll();
     e.preventDefault();
 }
@@ -93,8 +106,9 @@ const mouseMove = function(e) {
         const x2 = e.pageX;
         const y2 = e.pageY;
         
-        // Draw temporary line for animation.
+        // Draw temporary shape for animation.
         // Don't need to store object in array.
+        // Draw temporary line.
         if (drawObject == "line") {
             drawType = gl.LINES
             vertices = [
@@ -102,8 +116,24 @@ const mouseMove = function(e) {
                 canvasCoordinateX(x2), canvasCoordinateY(y2)
             ];
         }
+        
+        // Draw temporary square.
+        if (drawObject == "square") {
+            drawType = gl.TRIANGLE_STRIP;
 
-        if (drawObject == "square"){
+            const distance = Math.abs(x1 - x2) > Math.abs(y1 - y2) ? x1 - x2 
+                : y1 - y2
+            vertices = [
+                canvasCoordinateX(x1), canvasCoordinateY(y1),
+                canvasCoordinateX(x1), canvasCoordinateY(y1-distance),
+                canvasCoordinateX(x1-distance), canvasCoordinateY(y1),
+                canvasCoordinateX(x1-distance), canvasCoordinateY(y1-distance),
+            ];
+
+        }
+        
+        // Draw temporary rectangle.
+        if (drawObject == "rectangle") {
             drawType = gl.TRIANGLE_FAN;
             vertices = [
                 canvasCoordinateX(x1), canvasCoordinateY(y1),
@@ -112,10 +142,12 @@ const mouseMove = function(e) {
                 canvasCoordinateX(x2), canvasCoordinateY(y1),
             ];
         }
-        // Draw temporary object.
+
+        // Render temporary object.
         render(drawType, vertices, [0, 0, 0]);
     }
 
+    // Refresh screen.
     renderAll();
     e.preventDefault();
 }
