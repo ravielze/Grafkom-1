@@ -1,76 +1,48 @@
 "use strict";
 
-// TODO: The description of each variable is not finale.
-
-// Variable.
-
-// Current object that are going to be drawn.
-let drawObject = '';
-
-// State when user is drawing.
-// When current draw objet is not empty.
-let isDrawing = false;
-
-// Drawing attribute initialization.
-let x1,x2,y1,y2;
-let vertices = [];
-let drawType = gl.TRIANGLES;
-let rgbVal = [0, 0, 0];
-
-// Capture all button elements.
-const btnDrawLine = document.getElementById("draw-line");
-const btnDrawSquare = document.getElementById("draw-square");
-const btnDrawPolygon = document.getElementById("draw-polygon");
-const btnDrawRectangle = document.getElementById("draw-rectangle");
-const btnEndPolygon = document.getElementById("end-polygon");
-
 // Button event handler.
 // Change the drawn object based on button.
-btnDrawLine.addEventListener("click", () => {
+btnDrawLine.addEventListener("click", (e) => {
     if (drawObject == '') {
         drawObject = 'line';
     };
+    e.preventDefault();
 });
-btnDrawSquare.addEventListener("click", () => {
+btnDrawSquare.addEventListener("click", (e) => {
     if (drawObject == '') {
         drawObject = 'square';
     };
+    e.preventDefault();
 });
-btnDrawPolygon.addEventListener("click", () => {
+btnDrawPolygon.addEventListener("click", (e) => {
     if (drawObject == '') {
         drawObject = 'polygon';
     };
+    e.preventDefault();
 });
-btnDrawRectangle.addEventListener("click", () => {
+btnDrawRectangle.addEventListener("click", (e) => {
     if (drawObject == '') {
         drawObject = 'rectangle';
     };
-});
-
-// End drawing polygon.
-btnEndPolygon.addEventListener("click", () => {
-    if (drawObject == 'polygon' && vertices.length > 4) {
-        // Remove last point
-        vertices.pop();
-        vertices.pop();
-
-        // Create Square object and store it in array.
-        const polygon = new Shape(idx, drawType, vertices, rgbVal, 'polygon');
-        allShapes.push(polygon);
-
-        // Refresh drawing attribute.
-        vertices = [];
-        idx = idx + 1;
-        drawObject = '';
-        
-        // Refresh screen.
-        renderAll();
-    }
+    e.preventDefault();
 });
 
 // Mouse event handler on canvas.
 // Mouse click event handler.
-const mouseDown = function(e){
+const mouseDown = (e) => {
+
+    // Right click.
+    if (e.button == 2) {
+        // Finish drawing polygon.
+        if (drawObject == 'polygon' && vertices.length > 4) {
+            isDrawing = false;
+            // Refresh screen.
+            renderAll();
+            e.preventDefault();
+            return true;
+        }
+    }  
+
     // Currently drawing object.
     if (drawObject != ''){
         x1 = e.pageX;
@@ -90,6 +62,9 @@ const mouseDown = function(e){
         // Initiate drawing Polygon.
         if (drawObject == "polygon" && vertices.length >= 4) {
             vertices.push(canvasCoordinateX(x2), canvasCoordinateY(y2));
+            const hexVal =  document.getElementById("color-input").value
+            rgbVal = hexToRgb(hexVal)
+            render(drawType, vertices, rgbVal);
         }
         
     }
@@ -97,10 +72,11 @@ const mouseDown = function(e){
     // Refresh screen.
     renderAll();
     e.preventDefault();
+    return true;
 }
 
 // Mouse up event handler.
-const mouseUp = function(e) {
+const mouseUp = (e) => {
     // Already finish drawing object.
     if (drawObject != '' && !isDrawing){
 
@@ -123,10 +99,18 @@ const mouseUp = function(e) {
             allShapes.push(rectangle);
         }
 
+        if (drawObject == 'polygon') {
+            // Remove last point
+            vertices.pop();
+            vertices.pop();
+
+            // Create Square object and store it in array.
+            const polygon = new Shape(idx, drawType, vertices, rgbVal, 'polygon');
+            allShapes.push(polygon);
+        }
+
         // Refresh drawing attribute.
-        vertices = [];
-        idx = idx + 1;
-        drawObject = '';
+        refreshDrawAttribute();
     }
 
     // Refresh screen.
@@ -135,7 +119,7 @@ const mouseUp = function(e) {
 }
 
 // Mouse move event handler.
-const mouseMove = function(e) {
+const mouseMove = (e) => {
     // Currently drawing object.
     if (isDrawing){
         // Capture mouse coordinate.
@@ -143,7 +127,6 @@ const mouseMove = function(e) {
         let y2 = e.pageY;
         
         // Draw temporary shape for animation.
-        // Don't need to store object in array.
         // Draw temporary line.
         if (drawObject == "line") {
             // Line draw attribute.
@@ -205,12 +188,13 @@ const mouseMove = function(e) {
                 // Add the latest coordinate.
                 vertices.push(canvasCoordinateX(x2), canvasCoordinateY(y2));
             }
-            
-            // Polygon draw attribute.
         }
 
         // Render temporary object.
-        render(drawType, vertices, [0, 0, 0]);
+        const hexVal =  document.getElementById("color-input").value
+        rgbVal = hexToRgb(hexVal)
+        console.log(rgbVal);
+        render(drawType, vertices, rgbVal);
     }
 
     // Refresh screen.

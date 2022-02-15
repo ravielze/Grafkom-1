@@ -1,64 +1,12 @@
 "use strict";
 
-// TODO: Refactor all code to be more readable and clean.
-
-// Object Definition.
-// Represent shape that can be drawn in CAD.
-class Shape {
-	constructor(id, type, vertices, rgbVal, shapeName) {
-		this.id = id;
-		this.type = type;
-		this.shapeName = shapeName;
-		this.vertices = vertices;
-		this.rgbVal = rgbVal;
-	}
-}
-
-// Represent each edge in the corresponding shape.
-class ShapePoint {
-	constructor(object_id, vertices) {
-		this.object_id = object_id;
-		this.vertices = vertices;
-	}
-}
-
-// Configuration variables.
-const pointSize = 0.03;
-
-// Variables.
-/** @type Shape[] */
-const allShapes = [];
-/** @type ShapePoint[] */
-let allShapePoints = [];
-let idx = 0;
-
-// Vertex Shader configuration.
-const vert = `
-	// Attribute that receive data from buffer.
-	attribute vec2 position;	
-	
-	// Vertex Shader main program.
-	void main() {
-		// Special variable in vertex shader. 
-		gl_Position = vec4(position, 0.0, 1.0);
-	}
-`
-
-// Fragmen Shader configuration.
-const frag = `
-	// Fragment shader precision.
-	precision highp float;
-	
-	// Attribute that receive data from buffer.
-	uniform vec4 color;
-	
-	// Fragment Shader main program.
-	void main() {
-  		gl_FragColor = color;
-	}
-`
-
-// Create shader. 
+/**
+ * @description Create shader.
+ * @param {WebGLRenderingContext} gl - WebGL context.
+ * @param {number} type - gl.VERTEX_SHADER or gl.FRAGMENT_SHADER
+ * @param {string} source - shader source code
+ * @returns {WebGLShader} shader or null if failed
+ */
 const initShader = (gl, type, source) =>{
 	// Create and compile the shader.
 	let shader = gl.createShader(type);
@@ -78,7 +26,13 @@ const initShader = (gl, type, source) =>{
 	gl.deleteShader(shader);
 } 
 
-// Create shader program.
+/**
+ * @description Create shader program.
+ * @param {WebGLRenderingContext} gl - WebGL context.
+ * @param {WebGLShader} vertexShader - Vertex shader.
+ * @param {WebGLShader} fragmentShader - Fragment shader.
+ * @returns 
+ */
 const createProgram = (gl, vertexShader, fragmentShader) => {
 	// Create program.
 	let program = gl.createProgram();
@@ -103,7 +57,12 @@ const createProgram = (gl, vertexShader, fragmentShader) => {
 	gl.deleteProgram(program);
 }
 
-// Initialize buffers in GPU before drawing the object.
+/**
+ * @description Initialize buffers in GPU before drawing the object.
+ * @param {number[]} vertices - vertices of shape.
+ * @param {number[]} rgbVal - color of shape.
+ * @returns {number} number of count to draw shape.
+ */
 const initBuffers = (vertices, rgbVal) => {
 	// Binding data
 	var buffer = gl.createBuffer()
@@ -115,7 +74,8 @@ const initBuffers = (vertices, rgbVal) => {
 
 	// Set the color
 	program.color = gl.getUniformLocation(program, 'color')
-	// TODO: remember the color is a vec4(range from 0-1 not 0-256).
+	rgbVal = normalizeRGB(...rgbVal)
+	
 	gl.uniform4f(program.color, rgbVal[0], rgbVal[1], rgbVal[2], 1)
   
 	// Set the position
@@ -124,23 +84,29 @@ const initBuffers = (vertices, rgbVal) => {
 	gl.vertexAttribPointer(program.position, 2, gl.FLOAT, false, 0, 0)
   
 	return vertices.length / 2;
-	// return vertices.length / 2;
 }
 
-// Draw the object.
+/**
+ * @description Draw the object.
+ * @param {enum} type - gl.TRIANGLE_STRIP or gl.TRIANGLE_FAN etc.
+ * @param {number[]} vertices - vertices of shape.
+ * @param {number[]} rgbVal - color of shape.
+ */
 const render = (type, vertices, rgbVal) => {
 	var n = initBuffers(new Float32Array(vertices), rgbVal);
 	gl.drawArrays(type, 0, n);
 }
 
-// Draw object point (square in each edge of object).
+/**
+ * @description  Draw object point (square in each edge of object).
+ * @param {Shape} shape 
+ */
 const renderShapePoint = (shape) => {	
 	const numOfPoints = shape.vertices.length / 2;
 	for (let i = 0; i < numOfPoints; i++) {
 		// Get point coordinates.
-		// (x1, y1) is the left-down coordinate of the point.
-		const x1 = vertices[i * 2] - pointSize / 2;
-		const y1 = vertices[i * 2 + 1] - pointSize / 2;
+		const x1 = shape.vertices[i * 2] - pointSize / 2;
+		const y1 = shape.vertices[i * 2 + 1] - pointSize / 2;
 		const x2 = x1 + pointSize;
 		const y2 = y1 + pointSize;
 		
@@ -160,29 +126,24 @@ const renderShapePoint = (shape) => {
 	}
 }
 
-// Draw all object.
+/**
+ * @description Draw all object.
+ */
 const renderAll = () => {
 	// Reset All point data.
-	// console.log("1");
-	// console.log(allShapePoints);
 	allShapePoints = [];
 
 	// Redraw all shape and refill all point.
 	allShapes.forEach((shape) => {
 		render(shape.type, shape.vertices, shape.rgbVal);
-		// render(gl.POINTS, shape.vertices, [0, 0, 0]);
-		// renderShapePoint(shape);
+		renderShapePoint(shape);
 	});
-	// console.log("2");
-	// console.log(allShapes);
-	// console.log(allShapePoints);
- }
+}
   
 // ======================
 // Main program
 
 // Init webgl.
-const canvas = document.getElementById("canvasWebGL");
 const gl = canvas.getContext("webgl");
 if (!gl) {
 	alert("Your browser does not support WebGL.");
@@ -199,18 +160,4 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 const vertexShader = initShader(gl, gl.VERTEX_SHADER, vert);
 const fragmentShader = initShader(gl, gl.FRAGMENT_SHADER, frag);
 const program = createProgram(gl, vertexShader, fragmentShader);
-
-
-// // Create static drawing.
-// // TODO: Create dynamic drawing based on mouse input.
-// let positions = [
-// 	0, 0,
-// 	0, 0.5,
-// 	1, 0,
-// 	// 1, 0.5,
-// ];
-// let rgbVal = [Math.random(), Math.random(), Math.random()];
-// let type = gl.TRIANGLES;
-// // render(type, positions, rgbVal);
-// render(gl.TRIANGLE_STRIP, positions, [0, 0, 0]);
-// // ======================
+// ======================

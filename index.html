@@ -11,14 +11,11 @@
       <button class="button" id="draw-square">Square</button>
       <button class="button" id="draw-rectangle">Rectangle</button>
       <button class="button" id="draw-polygon">Polygon</button>
-      <button class="button" id="end-polygon">End Polygon</button>
       <button class="button" id="download">Download</button>
       <button class="button" id="change-color">Change Color</button>
       <button class="button">Resize </button>
       <input id="size-input" type="number" min="1" value="80">
       <label>Ukuran</label>
-      <input id="side-input" type="number" min="3" value="6">
-      <label>Jumlah Side</label>
       <input id="color-input" type="color" name="head" value="#386299">
       <label>Color Picker</label>
       <input type = "file" id="fileinput"\>
@@ -27,7 +24,7 @@
       Memindahkan titik
     </div>
     <div id="help">
-      <button class="button" id="help-button">Show Help</button>
+      <button class="button" id="help-button" onclick="onClickHelp()">Show Help</button>
       <div id="help-content">
         <div class="title-help">Menggambar Bentuk</div>
         <ul>
@@ -35,16 +32,17 @@
           <li>Tekan salah satu tombol tersebut, lalu pilih coordinat posisi dengan mengklik pada canvas</li>
           <li>Untuk Line, diperlukan dua kali klik untuk menentukan titik awal dan titik akhir garis</li>
           <li>Untuk Square, diperlukan dua kali klik untuk menentukan ukuran dari persegi</li>
-          <li>Untuk Polygon, diperlukan satu kali klik untuk menentukan titik tengah geometry</li>
-          <li>Untuk Non Simetri Poly, diperlukan klik sebanyak jumlah sisi poligon untuk menentukan letak titik sudut poligon</li>
+          <li>Untuk Rectangle, diperlukan dua kali klik untuk menentukan ukuran dari persegi panjang </li>
+          <li>
+            Untuk Polygon, wajib menggunakan klik kiri. anda bebas melakukan klik sebanyak apapun asalkan lebih dari 1 kali,
+            anda dapat mengakhiri pembuatan polygon dengan melakukan klik kanan.
+          </li>
         </ul>
         <br>
         <ul>
           <div class="title-help">Mengganti Attribut</div>
-          <li>Terdapat input field ukuran dan jumlah side</li>
-          <li>Field ukuran digunakan untuk mengatur ukuran Polygon Simetri dan Square</li>
-          <li>Field jumlah side digunakan untuk mengatur jumlah sisi dari Polygon</li>
-          <li>Terdapat pula Color Picker yang dapat digunakan untuk mengganti warna geometry yang ingin digambar</li>
+          <li>Terdapat input color picker</li>
+          <li>Terdapat Color Picker yang dapat digunakan untuk mengganti warna geometry yang ingin digambar</li>
         </ul>
         <br>
         <ul>
@@ -62,6 +60,7 @@
       </div>
     </div>
   </body>
+  <script type="text/javascript" src="./state.js"> </script>
   <script type="text/javascript" src="./webGl.js"> </script>
   <script type="text/javascript" src="./utility.js"> </script>
   <script type="text/javascript" src="./dom.js"> </script>
