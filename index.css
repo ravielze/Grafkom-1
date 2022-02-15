@@ -1,0 +1,72 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.tools-container {
+  margin-top: 10px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.button {
+  padding: 10px;
+  margin: 5px;
+}
+
+canvas{
+  border: 1px solid black;
+  background-color: rgb(219, 219, 219);
+}
+
+#side-input, #size-input {
+  width: 70px;
+  padding: 10px;
+  margin: 5px;
+}
+
+#color-input {
+  width: 80px;
+  height: 40px;
+  margin: 5px;
+}
+
+label{
+  margin-right: 10px;
+}
+
+#help{
+  position: fixed;
+  top: 10;
+  left: 510; 
+}
+
+#help-content {
+  margin-left: 20px;
+  margin-top: 5px;
+  line-height: 17px;
+  font-size: 13px;
+  display: block;
+}
+
+.title-help {
+  font-weight: 800;
+}
+
+#moving-line {
+  position: fixed;
+  top: 10;
+  left: 10;
+  font-size: 10px;
+  background-color: greenyellow;
+  border-radius: 2px;
+  display: none; 
+  z-index: 999;
+}
+
+#non-poly{
+  font-size: 10px;
+  height: 40px;
+  padding: 3px;
+}

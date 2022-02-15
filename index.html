@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title>WebGL - IF3260</title>
+    <link rel="stylesheet" href="./index.css">
+  </head>
+  <body>
+    
+    <canvas id = "canvasWebGL" width = "500" height = "500"></canvas>
+    <div class="tools-container">
+      <button class="button" id="draw-line">Line</button>
+      <button class="button" id="draw-square">Square</button>
+      <button class="button" id="draw-polygon">Polygon</button>
+      <button class="button" id="download">Download</button>
+      <button class="button" id="change-color">Change Color</button>
+      <button class="button">Resize </button>
+      <input id="size-input" type="number" min="1" value="80">
+      <label>Ukuran</label>
+      <input id="side-input" type="number" min="3" value="6">
+      <label>Jumlah Side</label>
+      <input id="color-input" type="color" name="head" value="#386299">
+      <label>Color Picker</label>
+      <input type = "file" id="fileinput"\>
+    </div>
+    <div id="moving-line">
+      Memindahkan titik
+    </div>
+    <div id="help">
+      <button class="button" id="help-button">Show Help</button>
+      <div id="help-content">
+        <div class="title-help">Menggambar Bentuk</div>
+        <ul>
+          <li>Terdapat tombol Line, Square, Polygon, dan Non Simetri Poly untuk menggambar geometry</li>
+          <li>Tekan salah satu tombol tersebut, lalu pilih coordinat posisi dengan mengklik pada canvas</li>
+          <li>Untuk Line, diperlukan dua kali klik untuk menentukan titik awal dan titik akhir garis</li>
+          <li>Untuk Square, diperlukan dua kali klik untuk menentukan ukuran dari persegi</li>
+          <li>Untuk Polygon, diperlukan satu kali klik untuk menentukan titik tengah geometry</li>
+          <li>Untuk Non Simetri Poly, diperlukan klik sebanyak jumlah sisi poligon untuk menentukan letak titik sudut poligon</li>
+        </ul>
+        <br>
+        <ul>
+          <div class="title-help">Mengganti Attribut</div>
+          <li>Terdapat input field ukuran dan jumlah side</li>
+          <li>Field ukuran digunakan untuk mengatur ukuran Polygon Simetri dan Square</li>
+          <li>Field jumlah side digunakan untuk mengatur jumlah sisi dari Polygon</li>
+          <li>Terdapat pula Color Picker yang dapat digunakan untuk mengganti warna geometry yang ingin digambar</li>
+        </ul>
+        <br>
+        <ul>
+          <div class="title-help">Memodifikasi Bentuk</div>
+          <li>Bentuk-bentuk yang sudah digambar dapat diubah bentuknya dengan mengklik titik sudut yang ingin digeser, kemudian klik lokasi baru untuk titik sudut tersebut</li>
+          <li>Poligon yang sudah digambar dapat diganti warnanya dengan memilih warna pada color picker, mengklik tombol Change Color, dan mengklik bentuk polygon yang ingin diubah warnanya</li>
+          <li>Persegi yang sudah digambar dapat dimodifikasi ukurannya dengan mengklik resize dan klik persegi yang ingin diubah ukurannya, lalu geser cursor sampai ukuran yang diinginkan</li>
+        </ul>
+        <br>
+        <ul>
+          <div class="title-help">Menyimpan Hasil Gambar</div>
+          <li>Untuk menyimpan gambar pada canvas dapat menekan tombol Download, file akan tersimban pada folder download</li>
+          <li>Untuk mengimport gambar yang pernah disimpan dapat menekan tombol Choose File</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="./webGl.js"> </script>
+  <script type="text/javascript" src="./utility.js"> </script>
+  <script type="text/javascript" src="./dom.js"> </script>
+</html>
