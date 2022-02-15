@@ -5,25 +5,50 @@
 btnDrawLine.addEventListener("click", (e) => {
     if (drawObject == '') {
         drawObject = 'line';
-    };
+        showTask();
+    } else if (drawObject == 'line') {
+        drawObject = '';
+        refreshDrawAttribute();
+    } else {
+        alert("Anda sudah memilih " + drawObject + " sebelumnya.\nSilahkan menggambar.");
+    }
     e.preventDefault();
 });
+
 btnDrawSquare.addEventListener("click", (e) => {
     if (drawObject == '') {
         drawObject = 'square';
-    };
+        showTask();
+    } else if (drawObject == 'square') {
+        drawObject = '';
+        refreshDrawAttribute();
+    } else {
+        alert("Anda sudah memilih " + drawObject + " sebelumnya.\nSilahkan menggambar.");
+    }
     e.preventDefault();
 });
 btnDrawPolygon.addEventListener("click", (e) => {
     if (drawObject == '') {
         drawObject = 'polygon';
-    };
+        showTask();
+    } else if (drawObject == 'polygon') {
+        drawObject = '';
+        refreshDrawAttribute();
+    } else {
+        alert("Anda sudah memilih " + drawObject + " sebelumnya.\nSilahkan menggambar.");
+    }
     e.preventDefault();
 });
 btnDrawRectangle.addEventListener("click", (e) => {
     if (drawObject == '') {
         drawObject = 'rectangle';
-    };
+        showTask();
+    } else if (drawObject == 'rectangle') {
+        drawObject = '';
+        refreshDrawAttribute();
+    } else {
+        alert("Anda sudah memilih " + drawObject + " sebelumnya.\nSilahkan menggambar.");
+    }
     e.preventDefault();
 });
 
@@ -66,7 +91,6 @@ const mouseDown = (e) => {
             rgbVal = hexToRgb(hexVal)
             render(drawType, vertices, rgbVal);
         }
-        
     }
 
     // Refresh screen.
@@ -155,7 +179,6 @@ const mouseMove = (e) => {
                 canvasCoordinateX(x2), canvasCoordinateY(y1),
                 canvasCoordinateX(x2), canvasCoordinateY(y2),
             ];
-
         }
         
         // Draw temporary rectangle.
@@ -195,6 +218,8 @@ const mouseMove = (e) => {
         rgbVal = hexToRgb(hexVal)
         console.log(rgbVal);
         render(drawType, vertices, rgbVal);
+
+        showTask();
     }
 
     // Refresh screen.

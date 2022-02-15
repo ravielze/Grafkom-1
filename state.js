@@ -118,8 +118,8 @@ const content = document.getElementById("help-content")
 
 // Utility.
 /** @type {number} */
-const middleX = canvas.width / 2
+const middleX = canvas.width / 2  
 /** @type {number} */
-const middleY = canvas.height / 2
+const middleY = canvas.height / 2 
 /** @type {boolean} */
 let isHelpActive = false;

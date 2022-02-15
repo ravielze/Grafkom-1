@@ -6,7 +6,7 @@
  * @returns Float canvas coordinate
  */
 const canvasCoordinateX = (x) => {
-    
+    x = x - canvas.getBoundingClientRect().left
     let canvasCoorX = (x - middleX) / middleX
     return canvasCoorX
 } 
@@ -17,6 +17,7 @@ const canvasCoordinateX = (x) => {
  * @returns Float canvas coordinate
  */
 const canvasCoordinateY = (y) => {
+    y = y - canvas.getBoundingClientRect().top
     let canvasCoorY = -1 * (y - middleY) / middleY
     return canvasCoorY
 }
@@ -29,7 +30,16 @@ const refreshDrawAttribute = () => {
     vertices = [];
     idx = idx + 1;
     drawObject = '';
+    document.getElementById("moving-line").style.display = "none"
 };
+
+/**
+ * @description show current drawing task.
+ */
+const showTask = () => {
+    document.getElementById("moving-line").style.display = "block"
+    document.getElementById("moving-line").innerHTML = "Membuat " + drawObject;
+}
 
 /**
  * @description Show and hide help.
