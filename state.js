@@ -89,6 +89,16 @@ let drawObject = '';
 /** @type {boolean} */
 let isDrawing = false;
 
+// State when user is dragging.
+/** @type {boolean} */
+let isDragging = false;
+
+// Metadata for dragging
+/** @type {object} */
+let draggingMetadata = {
+    idx: null,
+};
+
 // Drawing attribute.
 /** @type {number} */
 let x1, x2, y1, y2;
