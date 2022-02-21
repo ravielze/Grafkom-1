@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // Object Definition.
 /**
@@ -6,21 +6,21 @@
  * Represent shape that can be drawn in CAD.
  */
 class Shape {
-	/**
-	 * Constructor.
-	 * @param {string} id - Shape id.
-	 * @param {string} type - Gl method to draw this shape, ex: gl.LINES.
-	 * @param {number[]} vertices - Shape array of coordinate, ex [0.5, 0.5, 0.5].
-	 * @param {number[]} rgbVal - Shape array of rgb color, ex [0.5, 0.5, 0.5].
-	 * @param {array} edges - Shape name.
-	 */
-	constructor(id, type, vertices, rgbVal, shapeName) {
-		this.id = id;
-		this.type = type;
-		this.shapeName = shapeName;
-		this.vertices = vertices;
-		this.rgbVal = rgbVal;
-	}
+    /**
+     * Constructor.
+     * @param {string} id - Shape id.
+     * @param {string} type - Gl method to draw this shape, ex: gl.LINES.
+     * @param {number[]} vertices - Shape array of coordinate, ex [0.5, 0.5, 0.5].
+     * @param {number[]} rgbVal - Shape array of rgb color, ex [0.5, 0.5, 0.5].
+     * @param {array} edges - Shape name.
+     */
+    constructor(id, type, vertices, rgbVal, shapeName) {
+        this.id = id;
+        this.type = type;
+        this.shapeName = shapeName;
+        this.vertices = vertices;
+        this.rgbVal = rgbVal;
+    }
 }
 
 /**
@@ -28,17 +28,16 @@ class Shape {
  * Represent edge in shape.
  */
 class ShapePoint {
-	/**
-	 * Constructor.
-	 * @param {number} object_id - Corresponding shape id.
-	 * @param {number[]} vertices - Array of , ex [0.5, 0.5, 0.5].
-	 */
-	constructor(object_id, vertices) {
-		this.object_id = object_id;
-		this.vertices = vertices;
-	}
+    /**
+     * Constructor.
+     * @param {number} object_id - Corresponding shape id.
+     * @param {number[]} vertices - Array of , ex [0.5, 0.5, 0.5].
+     */
+    constructor(object_id, vertices) {
+        this.object_id = object_id;
+        this.vertices = vertices;
+    }
 }
-
 
 // Configuration variables.
 /** @type {number} */
@@ -55,7 +54,7 @@ const vert = `
 		// Special variable in vertex shader. 
 		gl_Position = vec4(position, 0.0, 1.0);
 	}
-`
+`;
 
 // Fragmen Shader configuration.
 /** @type {string} */
@@ -70,7 +69,7 @@ const frag = `
 	void main() {
   		gl_FragColor = color;
 	}
-`
+`;
 
 // Variables.
 // webGL.
@@ -92,7 +91,7 @@ let isDrawing = false;
 
 // Drawing attribute.
 /** @type {number} */
-let x1,x2,y1,y2;
+let x1, x2, y1, y2;
 /** @type {number[]} */
 let vertices = [];
 /** @enum */
@@ -102,24 +101,24 @@ let rgbVal = [0, 0, 0];
 
 // HTML ELEMENTS.
 /** @type {HTMLCanvasElement} */
-const canvas = document.getElementById("canvasWebGL");
+const canvas = document.getElementById('canvasWebGL');
 /** @type {HTMLButtonElement} */
-const btnDrawLine = document.getElementById("draw-line");
+const btnDrawLine = document.getElementById('draw-line');
 /** @type {HTMLButtonElement} */
-const btnDrawSquare = document.getElementById("draw-square");
+const btnDrawSquare = document.getElementById('draw-square');
 /** @type {HTMLButtonElement} */
-const btnDrawPolygon = document.getElementById("draw-polygon");
+const btnDrawPolygon = document.getElementById('draw-polygon');
 /** @type {HTMLButtonElement} */
-const btnDrawRectangle = document.getElementById("draw-rectangle");
+const btnDrawRectangle = document.getElementById('draw-rectangle');
 /** @type {HTMLButtonElement} */
-const helpBtn = document.getElementById("help-button")
+const helpBtn = document.getElementById('help-button');
 /** @type {HTMLButtonElement} */
-const content = document.getElementById("help-content")
+const content = document.getElementById('help-content');
 
 // Utility.
 /** @type {number} */
-const middleX = canvas.width / 2  
+const middleX = canvas.width / 2;
 /** @type {number} */
-const middleY = canvas.height / 2 
+const middleY = canvas.height / 2;
 /** @type {boolean} */
 let isHelpActive = false;
