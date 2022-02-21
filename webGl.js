@@ -21,7 +21,7 @@ const initShader = (gl, type, source) => {
     }
 
     // If there is an error, log it and delete the shader.
-    console.log(gl.getShaderInfoLog(shader));
+    console.error(gl.getShaderInfoLog(shader));
     alert('Failed to initialize the shader.');
     gl.deleteShader(shader);
 };
@@ -52,7 +52,7 @@ const createProgram = (gl, vertexShader, fragmentShader) => {
     }
 
     // If there is an error, log it and delete the program.
-    console.log(gl.getProgramInfoLog(program));
+    console.error(gl.getProgramInfoLog(program));
     alert('Failed to initialize the shader program.');
     gl.deleteProgram(program);
 };
