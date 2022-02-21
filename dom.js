@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 // Button event handler.
 // Change the drawn object based on button.
-btnDrawLine.addEventListener("click", (e) => {
+btnDrawLine.addEventListener('click', (e) => {
     if (drawObject == '') {
         drawObject = 'line';
         showTask();
@@ -10,12 +10,12 @@ btnDrawLine.addEventListener("click", (e) => {
         drawObject = '';
         refreshDrawAttribute();
     } else {
-        alert("Anda sudah memilih " + drawObject + " sebelumnya.\nSilahkan menggambar.");
+        alert('Anda sudah memilih ' + drawObject + ' sebelumnya.\nSilahkan menggambar.');
     }
     e.preventDefault();
 });
 
-btnDrawSquare.addEventListener("click", (e) => {
+btnDrawSquare.addEventListener('click', (e) => {
     if (drawObject == '') {
         drawObject = 'square';
         showTask();
@@ -23,11 +23,11 @@ btnDrawSquare.addEventListener("click", (e) => {
         drawObject = '';
         refreshDrawAttribute();
     } else {
-        alert("Anda sudah memilih " + drawObject + " sebelumnya.\nSilahkan menggambar.");
+        alert('Anda sudah memilih ' + drawObject + ' sebelumnya.\nSilahkan menggambar.');
     }
     e.preventDefault();
 });
-btnDrawPolygon.addEventListener("click", (e) => {
+btnDrawPolygon.addEventListener('click', (e) => {
     if (drawObject == '') {
         drawObject = 'polygon';
         showTask();
@@ -35,11 +35,11 @@ btnDrawPolygon.addEventListener("click", (e) => {
         drawObject = '';
         refreshDrawAttribute();
     } else {
-        alert("Anda sudah memilih " + drawObject + " sebelumnya.\nSilahkan menggambar.");
+        alert('Anda sudah memilih ' + drawObject + ' sebelumnya.\nSilahkan menggambar.');
     }
     e.preventDefault();
 });
-btnDrawRectangle.addEventListener("click", (e) => {
+btnDrawRectangle.addEventListener('click', (e) => {
     if (drawObject == '') {
         drawObject = 'rectangle';
         showTask();
@@ -47,7 +47,7 @@ btnDrawRectangle.addEventListener("click", (e) => {
         drawObject = '';
         refreshDrawAttribute();
     } else {
-        alert("Anda sudah memilih " + drawObject + " sebelumnya.\nSilahkan menggambar.");
+        alert('Anda sudah memilih ' + drawObject + ' sebelumnya.\nSilahkan menggambar.');
     }
     e.preventDefault();
 });
@@ -55,7 +55,6 @@ btnDrawRectangle.addEventListener("click", (e) => {
 // Mouse event handler on canvas.
 // Mouse click event handler.
 const mouseDown = (e) => {
-
     // Right click.
     if (e.button == 2) {
         // Finish drawing polygon.
@@ -66,29 +65,29 @@ const mouseDown = (e) => {
             e.preventDefault();
             return true;
         }
-    }  
+    }
 
     // Currently drawing object.
-    if (drawObject != ''){
+    if (drawObject != '') {
         x1 = e.pageX;
         y1 = e.pageY;
-        isDrawing = true; 
+        isDrawing = true;
 
         // Finish drawing Line.
-        if (drawObject == "line" && vertices.length == 4) {
+        if (drawObject == 'line' && vertices.length == 4) {
             isDrawing = false;
         }
 
         // Finish drawing Square.
-        if ((drawObject == "rectangle" || drawObject == "square") && vertices.length == 8) {
+        if ((drawObject == 'rectangle' || drawObject == 'square') && vertices.length == 8) {
             isDrawing = false;
         }
 
         // Initiate drawing Polygon.
-        if (drawObject == "polygon" && vertices.length >= 4) {
+        if (drawObject == 'polygon' && vertices.length >= 4) {
             vertices.push(canvasCoordinateX(x2), canvasCoordinateY(y2));
-            const hexVal =  document.getElementById("color-input").value
-            rgbVal = hexToRgb(hexVal)
+            const hexVal = document.getElementById('color-input').value;
+            rgbVal = hexToRgb(hexVal);
             render(drawType, vertices, rgbVal);
         }
     }
@@ -97,20 +96,19 @@ const mouseDown = (e) => {
     renderAll();
     e.preventDefault();
     return true;
-}
+};
 
 // Mouse up event handler.
 const mouseUp = (e) => {
     // Already finish drawing object.
-    if (drawObject != '' && !isDrawing){
-
+    if (drawObject != '' && !isDrawing) {
         // Determine draw, reate and save object.
         if (drawObject == 'line') {
             // Create Line object and store it in array.
             const line = new Shape(idx, gl.LINES, vertices, rgbVal, 'line');
             allShapes.push(line);
         }
-        
+
         if (drawObject == 'square') {
             // Create Square object and store it in array.
             const square = new Shape(idx, gl.TRIANGLE_STRIP, vertices, rgbVal, 'square');
@@ -140,67 +138,79 @@ const mouseUp = (e) => {
     // Refresh screen.
     renderAll();
     e.preventDefault();
-}
+};
 
 // Mouse move event handler.
 const mouseMove = (e) => {
     // Currently drawing object.
-    if (isDrawing){
+    if (isDrawing) {
         // Capture mouse coordinate.
         let x2 = e.pageX;
         let y2 = e.pageY;
-        
+
         // Draw temporary shape for animation.
         // Draw temporary line.
-        if (drawObject == "line") {
+        if (drawObject == 'line') {
             // Line draw attribute.
-            drawType = gl.LINES
+            drawType = gl.LINES;
             vertices = [
-                canvasCoordinateX(x1), canvasCoordinateY(y1), 
-                canvasCoordinateX(x2), canvasCoordinateY(y2)
+                canvasCoordinateX(x1),
+                canvasCoordinateY(y1),
+                canvasCoordinateX(x2),
+                canvasCoordinateY(y2),
             ];
         }
-        
+
         // Draw temporary square.
-        if (drawObject == "square") {
+        if (drawObject == 'square') {
             // Count longest distance between x and y.
-            const distance = Math.abs(x1 - x2) > Math.abs(y1 - y2) ? Math.abs(x1 - x2) 
-                : Math.abs(y1 - y2);
+            const distance =
+                Math.abs(x1 - x2) > Math.abs(y1 - y2) ? Math.abs(x1 - x2) : Math.abs(y1 - y2);
 
             // Update x2 and y2 depending on distance and position relative to x1.
-            x2 = x1 > x2 ? x1-distance: x1 + distance
-            y2 = y1 > y2 ? y1-distance: y1 + distance
-            
+            x2 = x1 > x2 ? x1 - distance : x1 + distance;
+            y2 = y1 > y2 ? y1 - distance : y1 + distance;
+
             // Square draw attribute.
             drawType = gl.TRIANGLE_STRIP;
             vertices = [
-                canvasCoordinateX(x1), canvasCoordinateY(y1),
-                canvasCoordinateX(x1), canvasCoordinateY(y2),
-                canvasCoordinateX(x2), canvasCoordinateY(y1),
-                canvasCoordinateX(x2), canvasCoordinateY(y2),
+                canvasCoordinateX(x1),
+                canvasCoordinateY(y1),
+                canvasCoordinateX(x1),
+                canvasCoordinateY(y2),
+                canvasCoordinateX(x2),
+                canvasCoordinateY(y1),
+                canvasCoordinateX(x2),
+                canvasCoordinateY(y2),
             ];
         }
-        
+
         // Draw temporary rectangle.
-        if (drawObject == "rectangle") {
+        if (drawObject == 'rectangle') {
             // Rectangle draw attribute.
             drawType = gl.TRIANGLE_FAN;
             vertices = [
-                canvasCoordinateX(x1), canvasCoordinateY(y1),
-                canvasCoordinateX(x1), canvasCoordinateY(y2),
-                canvasCoordinateX(x2), canvasCoordinateY(y2),
-                canvasCoordinateX(x2), canvasCoordinateY(y1),
+                canvasCoordinateX(x1),
+                canvasCoordinateY(y1),
+                canvasCoordinateX(x1),
+                canvasCoordinateY(y2),
+                canvasCoordinateX(x2),
+                canvasCoordinateY(y2),
+                canvasCoordinateX(x2),
+                canvasCoordinateY(y1),
             ];
         }
 
         // Draw temporary polygon.
-        if (drawObject == "polygon") {
+        if (drawObject == 'polygon') {
             // Temporary draw line when polygon side <= 1.
             if (vertices.length == 0 || vertices.length == 4) {
                 drawType = gl.LINES;
                 vertices = [
-                    canvasCoordinateX(x1), canvasCoordinateY(y1), 
-                    canvasCoordinateX(x2), canvasCoordinateY(y2)
+                    canvasCoordinateX(x1),
+                    canvasCoordinateY(y1),
+                    canvasCoordinateX(x2),
+                    canvasCoordinateY(y2),
                 ];
             } else {
                 drawType = gl.TRIANGLE_FAN;
@@ -214,8 +224,8 @@ const mouseMove = (e) => {
         }
 
         // Render temporary object.
-        const hexVal =  document.getElementById("color-input").value
-        rgbVal = hexToRgb(hexVal)
+        const hexVal = document.getElementById('color-input').value;
+        rgbVal = hexToRgb(hexVal);
         console.log(rgbVal);
         render(drawType, vertices, rgbVal);
 
@@ -225,10 +235,9 @@ const mouseMove = (e) => {
     // Refresh screen.
     renderAll();
     e.preventDefault();
-}
+};
 
 // Atach mouse event handler on canvas.
-canvas.addEventListener("mousedown", mouseDown);
-canvas.addEventListener("mouseup", mouseUp);
-canvas.addEventListener("mousemove", mouseMove);
-
+canvas.addEventListener('mousedown', mouseDown);
+canvas.addEventListener('mouseup', mouseUp);
+canvas.addEventListener('mousemove', mouseMove);
