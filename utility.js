@@ -79,3 +79,22 @@ const hexToRgb = (hex) =>
 const normalizeRGB = (r, g, b) => {
     return [r / 255, g / 255, b / 255];
 };
+
+/**
+ * @description create closure function for click button event.
+ * @param {string} type
+ */
+const closureButtonClickFactory = (type) => {
+    return (e) => {
+        if (drawObject == '') {
+            drawObject = type;
+            showTask();
+        } else if (drawObject == type) {
+            drawObject = '';
+            refreshDrawAttribute();
+        } else {
+            alert('Anda sudah memilih ' + drawObject + ' sebelumnya.\nSilahkan menggambar.');
+        }
+        e.preventDefault();
+    };
+};
