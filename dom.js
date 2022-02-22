@@ -10,9 +10,22 @@ btnDrawPolygon.addEventListener('click', closureButtonClickFactory('polygon'));
 
 btnDrawRectangle.addEventListener('click', closureButtonClickFactory('rectangle'));
 
+const dragMouseDown = (e) => {
+    const curX = e.pageX;
+    const curY = e.pageY;
+    findClosestObject(canvasCoordinateX(curX), canvasCoordinateY(curY));
+    e.preventDefault();
+    return;
+};
+
 // Mouse event handler on canvas.
 // Mouse click event handler.
 const mouseDown = (e) => {
+    if (isDragging) {
+        isDragging = false;
+        e.preventDefault();
+        return;
+    }
     // Right click.
     if (e.button == 1) {
         // Finish drawing polygon.
@@ -22,6 +35,14 @@ const mouseDown = (e) => {
             renderAll();
         }
         e.preventDefault();
+        return;
+    } else if (e.button != 0) {
+        e.preventDefault();
+        return;
+    }
+
+    if (drawObject == '' && !isDrawing) {
+        dragMouseDown(e);
         return;
     }
 
@@ -99,6 +120,14 @@ const mouseUp = (e) => {
 
 // Mouse move event handler.
 const mouseMove = (e) => {
+    if (isDragging) {
+        const { idx: clickedShapeIdx, vertexIdx: clickedVertexIdx } = draggingMetadata;
+        allShapes[clickedShapeIdx].vertices[clickedVertexIdx] = canvasCoordinateX(e.pageX);
+        allShapes[clickedShapeIdx].vertices[clickedVertexIdx + 1] = canvasCoordinateY(e.pageY);
+        renderAll();
+        return;
+    }
+
     // Currently drawing object.
     if (isDrawing) {
         // Capture mouse coordinate.

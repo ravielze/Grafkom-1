@@ -98,3 +98,38 @@ const closureButtonClickFactory = (type) => {
         e.preventDefault();
     };
 };
+
+const euclidianDistance = (coor1, coor2) => {
+    const [a, b] = coor1;
+    const [c, d] = coor2;
+    return Math.sqrt((a - c) * (a - c) + (b - d) * (b - d));
+};
+
+const findClosestObject = (curX, curY) => {
+    if (!isDragging) {
+        draggingMetadata.idx = null;
+        draggingMetadata.vertexIdx = null;
+    }
+
+    var closestObj = [null, null];
+    var closestDistance = 999999;
+    for (var i = 0; i < allShapes.length; i++) {
+        for (var j = 0; j < allShapes[i].vertices.length; j += 2) {
+            const tx = allShapes[i].vertices[j];
+            const ty = allShapes[i].vertices[j + 1];
+            const dist = euclidianDistance([tx, ty], [curX, curY]);
+            if (dist <= closestDistance) {
+                closestDistance = dist;
+                closestObj = [i, j];
+            }
+        }
+    }
+
+    const closestShapeIdx = closestObj[0];
+    const closestVertexIdx = closestObj[1];
+    if (closestDistance <= 0.02 && closestShapeIdx !== null && closestVertexIdx !== null) {
+        isDragging = true;
+        draggingMetadata.idx = closestShapeIdx;
+        draggingMetadata.vertexIdx = closestVertexIdx;
+    }
+};

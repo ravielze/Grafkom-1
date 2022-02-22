@@ -97,6 +97,7 @@ let isDragging = false;
 /** @type {object} */
 let draggingMetadata = {
     idx: null,
+    vertexIdx: null,
 };
 
 // Drawing attribute.
