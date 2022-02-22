@@ -11,7 +11,7 @@ btnDrawPolygon.addEventListener('click', closureButtonClickFactory('polygon'));
 btnDrawRectangle.addEventListener('click', closureButtonClickFactory('rectangle'));
 
 changeColorBtn.addEventListener('click', (e) => {
-    toggleShapeSelecting();
+    toggleRecoloring();
 });
 
 const dragMouseDown = (e) => {
@@ -33,7 +33,7 @@ const mouseDown = (e) => {
                 const hexVal = document.getElementById('color-input').value;
                 shape.rgbVal = hexToRgb(hexVal);
                 renderAll();
-                toggleShapeSelecting(false);
+                toggleRecoloring(false);
             }
         });
         return;
