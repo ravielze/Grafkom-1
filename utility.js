@@ -238,3 +238,51 @@ const resize = (area) => {
     });
     return dilatedCoords;
 };
+
+/**
+ * @description export shapes into json file
+ */
+const exportData = () => {
+    var element = document.createElement('a');
+    var text = JSON.stringify(allShapes);
+    var fileName = 'data.json';
+    
+    element.setAttribute('href', 'data:text/json, ' + encodeURIComponent(text));
+    element.setAttribute('download', fileName);
+
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+};
+
+/**
+ * @description imports json file to render, json file from export above
+ */
+const importData = () => {
+    var fileInput = document.getElementById('fileinput')
+    var data = fileInput.files[0];
+
+    if (!data) {
+        alert('File gagal di-import');
+        return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            var shapes = JSON.parse(e.target.result);
+        }
+        catch(e) {
+            alert('File gagal di-import');
+            return;
+        }
+
+        if (!shapes) return;
+        allShapes.length = 0;
+        shapes.forEach((shape) => {
+            allShapes.push(shape); 
+        });
+        renderAll();
+    }
+    reader.readAsText(data);
+};

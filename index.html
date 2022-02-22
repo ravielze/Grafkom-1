@@ -72,7 +72,7 @@
                     <button class="btn btn-success btn-md mx-1" id="draw-square">Square</button>
                     <button class="btn btn-success btn-md mx-1" id="draw-rectangle">Rectangle</button>
                     <button class="btn btn-success btn-md mx-1" id="draw-polygon">Polygon</button>
-                    <button class="btn btn-primary btn-md mx-1" id="download">Download</button>
+                    <button class="btn btn-primary btn-md mx-1" id="download" onclick="exportData()">Download</button>
                     <button class="btn btn-danger btn-md mx-1" id="change-color">Change Color</button>
                     <button class="btn btn-secondary btn-md mx-1" id="resize">Resize</button>
                 </div>
@@ -85,7 +85,7 @@
                         title="Choose your color">
                 </div>
                 <div class="col-auto pt-4">
-                    <input class="form-control" type="file" id="formFile" id="fileinput">
+                    <input class="form-control" type="file" id="fileinput" onchange="importData()">
                 </div>
 
             </div>
