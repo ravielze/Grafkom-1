@@ -117,6 +117,8 @@ let rgbVal = [0, 0, 0];
 // HTML ELEMENTS.
 /** @type {HTMLCanvasElement} */
 const canvas = document.getElementById('canvasWebGL');
+/** @type {HTMLDivElement} */
+const container = document.getElementById('container');
 /** @type {HTMLButtonElement} */
 const btnDrawLine = document.getElementById('draw-line');
 /** @type {HTMLButtonElement} */
@@ -129,6 +131,8 @@ const btnDrawRectangle = document.getElementById('draw-rectangle');
 const helpBtn = document.getElementById('help-button');
 /** @type {HTMLButtonElement} */
 const content = document.getElementById('help-content');
+/** @type {HTMLButtonElement} */
+const changeColorBtn = document.getElementById('change-color');
 
 // Utility.
 /** @type {number} */
@@ -142,3 +146,31 @@ var randomColor = '#000000'.replace(/0/g, function () {
     return (~~(Math.random() * 16)).toString(16);
 });
 document.getElementById('color-input').value = randomColor;
+
+const toggleShapeSelecting = (state) => {
+    if (state === undefined || state === null) {
+        isShapeSelectingMode = !isShapeSelectingMode;
+    } else {
+        isShapeSelectingMode = state;
+    }
+
+    if (isShapeSelectingMode) {
+        container.classList.add('bucket');
+    } else {
+        container.classList.remove('bucket');
+    }
+};
+
+const toggleDragging = (state) => {
+    if (state === undefined || state === null) {
+        isDragging = !isDragging;
+    } else {
+        isDragging = state;
+    }
+
+    if (isDragging) {
+        container.classList.add('grabbing');
+    } else {
+        container.classList.remove('grabbing');
+    }
+};

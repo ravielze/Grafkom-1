@@ -103,12 +103,23 @@ const closureButtonClickFactory = (type) => {
     };
 };
 
+/**
+ * @description Find euclidian distance between (x1,y1) and (x2,y2)
+ * @param {number[x1,y1]} coor1
+ * @param {number[x2,y2]} coor2
+ * @returns {number} Euclidan distance
+ */
 const euclidianDistance = (coor1, coor2) => {
     const [a, b] = coor1;
     const [c, d] = coor2;
     return Math.sqrt((a - c) * (a - c) + (b - d) * (b - d));
 };
 
+/**
+ * @description Find nearest ShapePoints and Shape
+ * @param {number} curX mouse x position
+ * @param {number} curY mouse y position
+ */
 const findClosestObject = (curX, curY) => {
     if (!isDragging) {
         draggingMetadata.idx = null;
@@ -132,8 +143,62 @@ const findClosestObject = (curX, curY) => {
     const closestShapeIdx = closestObj[0];
     const closestVertexIdx = closestObj[1];
     if (closestDistance <= 0.02 && closestShapeIdx !== null && closestVertexIdx !== null) {
-        isDragging = true;
+        toggleDragging(true);
         draggingMetadata.idx = closestShapeIdx;
         draggingMetadata.vertexIdx = closestVertexIdx;
     }
 };
+
+/**
+ * @description check if a point is in area
+ * @param {number[x,y]} point
+ * @param {number[x1,y1,x2,y2,x3,y3,...]} area
+ * @returns boolean
+ */
+const isPointInArea = (point, area, type) => {
+    const [px, py] = point;
+    var [minX, maxX, minY, maxY] = [area[0], area[0], area[1], area[1]];
+    for (var i = 2; i < area.length; i += 2) {
+        minX = Math.min(minX, area[i]);
+        minY = Math.min(minY, area[i + 1]);
+
+        maxX = Math.max(maxX, area[i]);
+        maxY = Math.max(maxY, area[i + 1]);
+    }
+
+    if (px < minX || px > maxX || py < minY || py > maxY) return false;
+
+    if (type === 'rectangle' || type === 'square') {
+        return true;
+    }
+
+    var inside = false;
+
+    var i = 0;
+    const nvert = area.length / 2;
+    var j = nvert - 1;
+
+    const getX = (n) => area[2 * n];
+    const getY = (n) => area[2 * n + 1];
+    while (true) {
+        if (i >= nvert) {
+            break;
+        }
+
+        // Using PNPoly - Point Inclusion in Polygon Test (https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html)
+        if (
+            getY(i) > py != getY(j) > py &&
+            px < ((getX(j) - getX(i)) * (py - getY(i))) / (getY(j) - getY(i)) + getX(i)
+        ) {
+            inside = !inside;
+        }
+        j = i;
+        i++;
+    }
+
+    return inside;
+};
+
+/**
+
+*/

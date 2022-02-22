@@ -10,6 +10,10 @@ btnDrawPolygon.addEventListener('click', closureButtonClickFactory('polygon'));
 
 btnDrawRectangle.addEventListener('click', closureButtonClickFactory('rectangle'));
 
+changeColorBtn.addEventListener('click', (e) => {
+    toggleShapeSelecting();
+});
+
 const dragMouseDown = (e) => {
     const curX = e.pageX;
     const curY = e.pageY;
@@ -21,8 +25,21 @@ const dragMouseDown = (e) => {
 // Mouse event handler on canvas.
 // Mouse click event handler.
 const mouseDown = (e) => {
+    if (isShapeSelectingMode) {
+        const curX = canvasCoordinateX(e.pageX);
+        const curY = canvasCoordinateY(e.pageY);
+        allShapes.forEach((shape) => {
+            if (isPointInArea([curX, curY], shape.vertices, shape.shapeName)) {
+                const hexVal = document.getElementById('color-input').value;
+                shape.rgbVal = hexToRgb(hexVal);
+                renderAll();
+                toggleShapeSelecting(false);
+            }
+        });
+        return;
+    }
     if (isDragging) {
-        isDragging = false;
+        toggleDragging(false);
         e.preventDefault();
         return;
     }
