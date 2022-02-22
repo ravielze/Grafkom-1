@@ -86,6 +86,10 @@ const normalizeRGB = (r, g, b) => {
  */
 const closureButtonClickFactory = (type) => {
     return (e) => {
+        if (isDragging) {
+            alert('Anda masih melakukan dragging terhadap suatu titik.');
+            return;
+        }
         if (drawObject == '') {
             drawObject = type;
             showTask();

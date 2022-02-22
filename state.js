@@ -41,7 +41,7 @@ class ShapePoint {
 
 // Configuration variables.
 /** @type {number} */
-const pointSize = 0.03;
+const pointSize = 0.018;
 
 // Vertex Shader configuration.
 /** @type {string} */
@@ -93,6 +93,10 @@ let isDrawing = false;
 /** @type {boolean} */
 let isDragging = false;
 
+// State when user needs to select a shape.
+/** @type {boolean} */
+let isShapeSelectingMode = false;
+
 // Metadata for dragging
 /** @type {object} */
 let draggingMetadata = {
@@ -133,3 +137,8 @@ const middleX = canvas.width / 2;
 const middleY = canvas.height / 2;
 /** @type {boolean} */
 let isHelpActive = false;
+
+var randomColor = '#000000'.replace(/0/g, function () {
+    return (~~(Math.random() * 16)).toString(16);
+});
+document.getElementById('color-input').value = randomColor;
