@@ -25,7 +25,7 @@ const dragMouseDown = (e) => {
 // Mouse event handler on canvas.
 // Mouse click event handler.
 const mouseDown = (e) => {
-    if (isShapeSelectingMode) {
+    if (isRecoloring) {
         const curX = canvasCoordinateX(e.pageX);
         const curY = canvasCoordinateY(e.pageY);
         allShapes.forEach((shape) => {

@@ -198,7 +198,3 @@ const isPointInArea = (point, area, type) => {
 
     return inside;
 };
-
-/**
-
-*/

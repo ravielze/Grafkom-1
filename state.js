@@ -93,9 +93,13 @@ let isDrawing = false;
 /** @type {boolean} */
 let isDragging = false;
 
-// State when user needs to select a shape.
+// State when user is recoloring.
 /** @type {boolean} */
-let isShapeSelectingMode = false;
+let isRecoloring = false;
+
+// State when user is resizing.
+/** @type {boolean} */
+let isResizing = false;
 
 // Metadata for dragging
 /** @type {object} */
@@ -147,14 +151,14 @@ var randomColor = '#000000'.replace(/0/g, function () {
 });
 document.getElementById('color-input').value = randomColor;
 
-const toggleShapeSelecting = (state) => {
+const toggleRecoloring = (state) => {
     if (state === undefined || state === null) {
-        isShapeSelectingMode = !isShapeSelectingMode;
+        isRecoloring = !isRecoloring;
     } else {
-        isShapeSelectingMode = state;
+        isRecoloring = state;
     }
 
-    if (isShapeSelectingMode) {
+    if (isRecoloring) {
         container.classList.add('bucket');
     } else {
         container.classList.remove('bucket');
@@ -172,5 +176,19 @@ const toggleDragging = (state) => {
         container.classList.add('grabbing');
     } else {
         container.classList.remove('grabbing');
+    }
+};
+
+const toggleResizing = (state) => {
+    if (state === undefined || state === null) {
+        isResizing = !isResizing;
+    } else {
+        isResizing = state;
+    }
+
+    if (isResizing) {
+        container.classList.add('resizing');
+    } else {
+        container.classList.remove('resizing');
     }
 };
