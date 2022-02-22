@@ -212,8 +212,10 @@ const toggleResizing = (state) => {
     }
 
     if (isResizing) {
+        showTask('Meresize bentuk');
         container.classList.add('resizing');
     } else {
+        hideTask();
         container.classList.remove('resizing');
     }
 };
