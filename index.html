@@ -40,16 +40,18 @@
                             <li>Terdapat input color picker</li>
                             <li>Terdapat Color Picker yang dapat digunakan untuk mengganti warna geometry yang ingin
                                 digambar</li>
+                            <li>Gunakan tombol Change Color lalu klik ke geometry yang diinginkan untuk mengganti warna
+                            </li>
                         </ul>
                         <div class="title-help">Memodifikasi Bentuk</div>
                         <ul>
                             <li>Bentuk-bentuk yang sudah digambar dapat diubah bentuknya dengan mengklik titik sudut
                                 yang ingin digeser, kemudian klik lokasi baru untuk titik sudut tersebut</li>
-                            <li>Poligon yang sudah digambar dapat diganti warnanya dengan memilih warna pada color
-                                picker, mengklik tombol Change Color, dan mengklik bentuk polygon yang ingin diubah
+                            <li>Geometry yang sudah digambar dapat diganti warnanya dengan memilih warna pada color
+                                picker, mengklik tombol Change Color, dan mengklik geometry yang ingin diubah
                                 warnanya</li>
-                            <li>Persegi yang sudah digambar dapat dimodifikasi ukurannya dengan mengklik resize dan klik
-                                persegi yang ingin diubah ukurannya, lalu geser cursor sampai ukuran yang diinginkan
+                            <li>Geometry yang sudah digambar dapat dimodifikasi ukurannya dengan menuliskan skala dari 0
+                                sampai 1 kemudian mengklik resize dan klik geometry yang ingin diubah ukurannya.
                             </li>
                         </ul>
                         <div class="title-help">Menyimpan Hasil Gambar</div>
@@ -65,25 +67,24 @@
         </div>
         <div class="row pt-3">
             <div class="tools-container">
-                <div class="col-auto">
+                <div class="col-auto pt-4">
                     <button class="btn btn-success btn-md me-1" id="draw-line">Line</button>
                     <button class="btn btn-success btn-md mx-1" id="draw-square">Square</button>
                     <button class="btn btn-success btn-md mx-1" id="draw-rectangle">Rectangle</button>
                     <button class="btn btn-success btn-md mx-1" id="draw-polygon">Polygon</button>
                     <button class="btn btn-primary btn-md mx-1" id="download">Download</button>
                     <button class="btn btn-danger btn-md mx-1" id="change-color">Change Color</button>
-                    <button class="btn btn-secondary btn-md mx-1">Resize </button>
-
+                    <button class="btn btn-secondary btn-md mx-1" id="resize">Resize</button>
                 </div>
-                <div class="col-auto">
-                    <!-- <label class="col-form-label">Ukuran</label> -->
-                    <input class="form-control" id="size-input" type="number" min="1" value="80">
+                <div class="col-auto form-group mx-2">
+                    <label class="col-form-label pb-0">Skala (0 sampai 5 kali)</label>
+                    <input class="form-control" id="size-input" type="number" min="0" max="5" step="0.01" value="0.5">
                 </div>
-                <div class="col-auto">
+                <div class="col-auto pt-4">
                     <input type="color" class="form-control form-control-color" id="color-input"
                         title="Choose your color">
                 </div>
-                <div class="col-auto">
+                <div class="col-auto pt-4">
                     <input class="form-control" type="file" id="formFile" id="fileinput">
                 </div>
 

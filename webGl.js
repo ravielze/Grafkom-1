@@ -97,6 +97,18 @@ const render = (type, vertices, rgbVal) => {
     gl.drawArrays(type, 0, n);
 };
 
+const shapePointFactory = (id, x, y) => {
+    // Get point coordinates.
+    const x1 = x - pointSize / 2;
+    const y1 = y - pointSize / 2;
+    const x2 = x1 + pointSize;
+    const y2 = y1 + pointSize;
+
+    // Construct and save shape point object.
+    const shapePointVertices = [x1, y1, x2, y1, x1, y2, x2, y2];
+    return new ShapePoint(id, shapePointVertices);
+};
+
 /**
  * @description  Draw object point (square in each edge of object).
  * @param {Shape} shape
@@ -104,20 +116,23 @@ const render = (type, vertices, rgbVal) => {
 const renderShapePoint = (shape) => {
     const numOfPoints = shape.vertices.length / 2;
     for (let i = 0; i < numOfPoints; i++) {
-        // Get point coordinates.
-        const x1 = shape.vertices[i * 2] - pointSize / 2;
-        const y1 = shape.vertices[i * 2 + 1] - pointSize / 2;
-        const x2 = x1 + pointSize;
-        const y2 = y1 + pointSize;
-
-        // Construct and save shape point object.
-        const shapePointVertices = [x1, y1, x2, y1, x1, y2, x2, y2];
-        const shapePoint = new ShapePoint(shape.id, shapePointVertices);
+        const shapePoint = shapePointFactory(
+            shape.id,
+            shape.vertices[i * 2],
+            shape.vertices[i * 2 + 1]
+        );
         allShapePoints.push(shapePoint);
 
         // Render the point.
         // Triangle Strip will draw complex object based on vertices .
-        render(gl.TRIANGLE_STRIP, shapePointVertices, [0, 0, 0]);
+        render(gl.TRIANGLE_STRIP, shapePoint.vertices, [0, 0, 0]);
+    }
+
+    if (isMidPointDebug) {
+        const [midX, midY] = getMiddlePoint(shape.vertices);
+        const midShapePoint = shapePointFactory(shape.id, midX, midY);
+        allShapePoints.push(midShapePoint);
+        render(gl.TRIANGLE_STRIP, midShapePoint.vertices, [255, 0, 0]);
     }
 };
 

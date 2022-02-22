@@ -14,6 +14,10 @@ changeColorBtn.addEventListener('click', (e) => {
     toggleRecoloring();
 });
 
+resizeBtn.addEventListener('click', (e) => {
+    toggleResizing();
+});
+
 const dragMouseDown = (e) => {
     const curX = e.pageX;
     const curY = e.pageY;
@@ -25,9 +29,21 @@ const dragMouseDown = (e) => {
 // Mouse event handler on canvas.
 // Mouse click event handler.
 const mouseDown = (e) => {
+    const curX = canvasCoordinateX(e.pageX);
+    const curY = canvasCoordinateY(e.pageY);
+    if (isResizing) {
+        for (var shape of allShapes) {
+            if (isPointInArea([curX, curY], shape.vertices, shape.shapeName)) {
+                shape.vertices = resize(shape.vertices);
+                toggleResizing();
+                renderAll();
+                break;
+            }
+        }
+        e.preventDefault();
+        return;
+    }
     if (isRecoloring) {
-        const curX = canvasCoordinateX(e.pageX);
-        const curY = canvasCoordinateY(e.pageY);
         allShapes.forEach((shape) => {
             if (isPointInArea([curX, curY], shape.vertices, shape.shapeName)) {
                 const hexVal = document.getElementById('color-input').value;
@@ -36,6 +52,7 @@ const mouseDown = (e) => {
                 toggleRecoloring(false);
             }
         });
+        e.preventDefault();
         return;
     }
     if (isDragging) {

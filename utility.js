@@ -30,15 +30,26 @@ const refreshDrawAttribute = () => {
     vertices = [];
     idx = idx + 1;
     drawObject = '';
-    document.getElementById('moving-line').style.display = 'none';
+    hideTask();
 };
 
 /**
- * @description show current drawing task.
+ * @description show current task label.
  */
-const showTask = () => {
+const showTask = (content) => {
     document.getElementById('moving-line').style.display = 'block';
-    document.getElementById('moving-line').innerHTML = 'Membuat ' + drawObject;
+    if (!content) {
+        document.getElementById('moving-line').innerHTML = 'Membuat ' + drawObject;
+    } else {
+        document.getElementById('moving-line').innerHTML = content;
+    }
+};
+
+/**
+ * @description hide current task label.
+ */
+const hideTask = () => {
+    document.getElementById('moving-line').style.display = 'none';
 };
 
 /**
@@ -124,6 +135,7 @@ const findClosestObject = (curX, curY) => {
     if (!isDragging) {
         draggingMetadata.idx = null;
         draggingMetadata.vertexIdx = null;
+        draggingMetadata.shapeName = null;
     }
 
     var closestObj = [null, null];
@@ -146,7 +158,22 @@ const findClosestObject = (curX, curY) => {
         toggleDragging(true);
         draggingMetadata.idx = closestShapeIdx;
         draggingMetadata.vertexIdx = closestVertexIdx;
+        draggingMetadata.shapeName = allShapes[closestShapeIdx].shapeName;
     }
+};
+
+const getMiddlePoint = (area) => {
+    var [minX, maxX, minY, maxY] = [area[0], area[0], area[1], area[1]];
+    for (var i = 2; i < area.length; i += 2) {
+        minX = Math.min(minX, area[i]);
+        minY = Math.min(minY, area[i + 1]);
+
+        maxX = Math.max(maxX, area[i]);
+        maxY = Math.max(maxY, area[i + 1]);
+    }
+    const midX = (minX + maxX) / 2;
+    const midY = (minY + maxY) / 2;
+    return [midX, midY];
 };
 
 /**
@@ -197,4 +224,17 @@ const isPointInArea = (point, area, type) => {
     }
 
     return inside;
+};
+
+const resize = (area) => {
+    const [a, b] = getMiddlePoint(area);
+    const scale = scaleForm.value;
+    const dilatedCoords = area.map((val, idx) => {
+        if (idx % 2 == 0) {
+            return scale * (val - a) + a;
+        } else {
+            return scale * (val - b) + b;
+        }
+    });
+    return dilatedCoords;
 };

@@ -43,6 +43,10 @@ class ShapePoint {
 /** @type {number} */
 const pointSize = 0.018;
 
+// Show Mid Point for Debug
+/** @type {boolean} */
+const isMidPointDebug = false;
+
 // Vertex Shader configuration.
 /** @type {string} */
 const vert = `
@@ -106,6 +110,7 @@ let isResizing = false;
 let draggingMetadata = {
     idx: null,
     vertexIdx: null,
+    shapeName: null,
 };
 
 // Drawing attribute.
@@ -137,6 +142,10 @@ const helpBtn = document.getElementById('help-button');
 const content = document.getElementById('help-content');
 /** @type {HTMLButtonElement} */
 const changeColorBtn = document.getElementById('change-color');
+/** @type {HTMLButtonElement} */
+const resizeBtn = document.getElementById('resize');
+/** @type {HTMLFormElement} */
+const scaleForm = document.getElementById('size-input');
 
 // Utility.
 /** @type {number} */
@@ -152,6 +161,9 @@ var randomColor = '#000000'.replace(/0/g, function () {
 document.getElementById('color-input').value = randomColor;
 
 const toggleRecoloring = (state) => {
+    if (isDragging || isResizing) {
+        return alert('Anda sedang melakukan resizing/dragging.');
+    }
     if (state === undefined || state === null) {
         isRecoloring = !isRecoloring;
     } else {
@@ -159,13 +171,18 @@ const toggleRecoloring = (state) => {
     }
 
     if (isRecoloring) {
+        showTask('Mengubah warna');
         container.classList.add('bucket');
     } else {
+        hideTask();
         container.classList.remove('bucket');
     }
 };
 
 const toggleDragging = (state) => {
+    if (isResizing || isRecoloring) {
+        return alert('Anda sedang melakukan resizing/recoloring.');
+    }
     if (state === undefined || state === null) {
         isDragging = !isDragging;
     } else {
@@ -174,12 +191,20 @@ const toggleDragging = (state) => {
 
     if (isDragging) {
         container.classList.add('grabbing');
+        const task = setTimeout(() => {
+            showTask('Mengubah posisi ' + draggingMetadata.shapeName);
+            clearTimeout(task);
+        }, 10);
     } else {
         container.classList.remove('grabbing');
+        hideTask();
     }
 };
 
 const toggleResizing = (state) => {
+    if (isDragging || isRecoloring) {
+        return alert('Anda sedang melakukan dragging/recoloring.');
+    }
     if (state === undefined || state === null) {
         isResizing = !isResizing;
     } else {
