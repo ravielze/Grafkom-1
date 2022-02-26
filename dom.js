@@ -44,12 +44,22 @@ const mouseDown = (e) => {
         return;
     }
     if (isRecoloring) {
+        const hexVal = document.getElementById('color-input').value;
+        const apply = (s) => {
+            s.rgbVal = hexToRgb(hexVal);
+            renderAll();
+            toggleRecoloring(false);
+        };
         allShapes.forEach((shape) => {
-            if (isPointInArea([curX, curY], shape.vertices, shape.shapeName)) {
-                const hexVal = document.getElementById('color-input').value;
-                shape.rgbVal = hexToRgb(hexVal);
-                renderAll();
-                toggleRecoloring(false);
+            if (shape.shapeName == 'line') {
+                const clickToLineDistance = findDistancePointToLine([curX, curY], shape.vertices);
+                if (clickToLineDistance <= 0.03 && clickToLineDistance >= 0.005) {
+                    return apply(shape);
+                }
+            } else {
+                if (isPointInArea([curX, curY], shape.vertices, shape.shapeName)) {
+                    return apply(shape);
+                }
             }
         });
         e.preventDefault();

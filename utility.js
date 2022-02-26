@@ -127,6 +127,28 @@ const euclidianDistance = (coor1, coor2) => {
 };
 
 /**
+ * @description Find distance between a point and a line
+ * @param {number[x1,y1]} point
+ * @param {number[x1,y1,x2,y2]} line
+ * @returns {number} distance
+ */
+const findDistancePointToLine = (point, line) => {
+    const [px1, py1] = point;
+    const [lx1, ly1, lx2, ly2] = line;
+
+    const yDiff = ly2 - ly1;
+    const xDiff = lx2 - lx1;
+
+    const a = -1 * yDiff;
+    const b = xDiff;
+    const c = yDiff * lx1 - xDiff * ly1;
+
+    const upper = a * px1 + b * py1 + c;
+    const bottom = Math.sqrt(a * a + b * b);
+    return Math.abs(upper / bottom);
+};
+
+/**
  * @description Find nearest ShapePoints and Shape
  * @param {number} curX mouse x position
  * @param {number} curY mouse y position
@@ -246,7 +268,7 @@ const exportData = () => {
     var element = document.createElement('a');
     var text = JSON.stringify(allShapes);
     var fileName = 'data.json';
-    
+
     element.setAttribute('href', 'data:text/json, ' + encodeURIComponent(text));
     element.setAttribute('download', fileName);
 
@@ -259,7 +281,7 @@ const exportData = () => {
  * @description imports json file to render, json file from export above
  */
 const importData = () => {
-    var fileInput = document.getElementById('fileinput')
+    var fileInput = document.getElementById('fileinput');
     var data = fileInput.files[0];
 
     if (!data) {
@@ -271,8 +293,7 @@ const importData = () => {
     reader.onload = (e) => {
         try {
             var shapes = JSON.parse(e.target.result);
-        }
-        catch(e) {
+        } catch (e) {
             alert('File gagal di-import');
             return;
         }
@@ -280,9 +301,9 @@ const importData = () => {
         if (!shapes) return;
         allShapes.length = 0;
         shapes.forEach((shape) => {
-            allShapes.push(shape); 
+            allShapes.push(shape);
         });
         renderAll();
-    }
+    };
     reader.readAsText(data);
 };
